@@ -1,9 +1,10 @@
 from rest_framework import status
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
+from rest_framework_simplejwt.tokens import RefreshToken
 
 from .serializers import LoginSerializer, RegisterSerializer
-
 
 class RegisterView(APIView):
     def post(self, request):
@@ -38,6 +39,8 @@ class LoginView(APIView):
         if serializer.is_valid():
             user = serializer.validated_data["user"]
 
+            refresh = RefreshToken.for_user(user)
+
             return Response(
                 {
                     "message": "Login successful.",
@@ -47,6 +50,10 @@ class LoginView(APIView):
                         "email": user.email,
                         "role": user.role,
                     },
+                    "tokens": {
+                        "refresh": str(refresh),
+                        "access": str(refresh.access_token),
+                    },
                 },
                 status=status.HTTP_200_OK,
             )
@@ -54,4 +61,19 @@ class LoginView(APIView):
         return Response(
             serializer.errors,
             status=status.HTTP_400_BAD_REQUEST,
+        )
+class MeView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        return Response(
+            {
+                "id": request.user.id,
+                "username": request.user.username,
+                "email": request.user.email,
+                "first_name": request.user.first_name,
+                "last_name": request.user.last_name,
+                "role": request.user.role,
+            },
+            status=status.HTTP_200_OK,
         )
