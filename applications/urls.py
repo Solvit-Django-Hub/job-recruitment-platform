@@ -3,6 +3,8 @@ from django.urls import path
 from .views import (
     ApplicationDetailView,
     ApplicationListCreateView,
+    CompanyApplicationDetailView,
+    CompanyApplicationListView,
 )
 
 
@@ -16,5 +18,15 @@ urlpatterns = [
         "<int:pk>/",
         ApplicationDetailView.as_view(),
         name="application-detail",
+    ),
+    path(
+        "company/",
+        CompanyApplicationListView.as_view(),
+        name="company-application-list",
+    ),
+    path(
+        "company/<int:pk>/",
+        CompanyApplicationDetailView.as_view(),
+        name="company-application-detail",
     ),
 ]

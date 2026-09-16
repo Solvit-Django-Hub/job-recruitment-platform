@@ -22,3 +22,25 @@ class ApplicationSerializer(serializers.ModelSerializer):
             "applied_at",
             "updated_at",
         )
+
+
+class CompanyApplicationSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Application
+        fields = (
+            "id",
+            "job",
+            "candidate",
+            "cover_letter",
+            "status",
+            "applied_at",
+            "updated_at",
+        )
+        read_only_fields = (
+            "id",
+            "job",
+            "candidate",
+            "cover_letter",
+            "applied_at",
+            "updated_at",
+        )
