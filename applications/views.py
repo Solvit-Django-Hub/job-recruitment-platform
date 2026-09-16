@@ -16,13 +16,10 @@ class ApplicationListCreateView(generics.ListCreateAPIView):
 
     def perform_create(self, serializer):
         candidate = self.request.user.candidate_profile
-
-        serializer.save(
-            candidate=candidate,
-        )
+        serializer.save(candidate=candidate)
 
 
-class ApplicationDetailView(generics.RetrieveUpdateDestroyAPIView):
+class ApplicationDetailView(generics.RetrieveDestroyAPIView):
     serializer_class = ApplicationSerializer
     permission_classes = [IsAuthenticated]
 

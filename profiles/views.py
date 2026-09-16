@@ -10,11 +10,20 @@ class CandidateProfileListCreateView(generics.ListCreateAPIView):
     serializer_class = CandidateProfileSerializer
     permission_classes = [IsAuthenticated]
 
+    def get_queryset(self):
+        return CandidateProfile.objects.filter(
+            user=self.request.user
+        )
+
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)
 
 
 class CandidateProfileDetailView(generics.RetrieveUpdateDestroyAPIView):
-    queryset = CandidateProfile.objects.all()
     serializer_class = CandidateProfileSerializer
     permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        return CandidateProfile.objects.filter(
+            user=self.request.user
+        )

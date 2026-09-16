@@ -16,6 +16,10 @@ class JobListCreateView(generics.ListCreateAPIView):
 
 
 class JobDetailView(generics.RetrieveUpdateDestroyAPIView):
-    queryset = Job.objects.all()
     serializer_class = JobSerializer
     permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        return Job.objects.filter(
+            company__owner=self.request.user
+        )
